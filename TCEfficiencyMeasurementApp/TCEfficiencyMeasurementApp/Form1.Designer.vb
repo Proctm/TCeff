@@ -22,12 +22,13 @@ Partial Class frmTCE
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Me.components = New System.ComponentModel.Container()
+        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea4 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series4 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmTCE))
         Me.btnStartTest = New System.Windows.Forms.Button()
         Me.btnStopTest = New System.Windows.Forms.Button()
@@ -47,11 +48,20 @@ Partial Class frmTCE
         Me.txtFinalPump = New System.Windows.Forms.TextBox()
         Me.txtFinalEff = New System.Windows.Forms.TextBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.Label6 = New System.Windows.Forms.Label()
         Me.lblEff = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.BtnEngPumpOff = New System.Windows.Forms.Button()
+        Me.btnEngPumpOn = New System.Windows.Forms.Button()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.txtEngPumpI = New System.Windows.Forms.TextBox()
+        Me.tmrStartLaser = New System.Windows.Forms.Timer(Me.components)
         CType(Me.crtLiveResults, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.crtResults, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnStartTest
@@ -126,27 +136,30 @@ Partial Class frmTCE
         'Label2
         '
         Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.Location = New System.Drawing.Point(357, 36)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(60, 13)
+        Me.Label2.Size = New System.Drawing.Size(69, 13)
         Me.Label2.TabIndex = 9
         Me.Label2.Text = "Seed [mW]"
         '
         'Label3
         '
         Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.Location = New System.Drawing.Point(443, 36)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(48, 13)
+        Me.Label3.Size = New System.Drawing.Size(55, 13)
         Me.Label3.TabIndex = 10
         Me.Label3.Text = "BR [uW]"
         '
         'Label4
         '
         Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label4.Location = New System.Drawing.Point(529, 36)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(59, 13)
+        Me.Label4.Size = New System.Drawing.Size(69, 13)
         Me.Label4.TabIndex = 11
         Me.Label4.Text = "Output [W]"
         '
@@ -161,16 +174,16 @@ Partial Class frmTCE
         '
         'crtLiveResults
         '
-        ChartArea1.Name = "ChartArea1"
-        Me.crtLiveResults.ChartAreas.Add(ChartArea1)
-        Legend1.Name = "Legend1"
-        Me.crtLiveResults.Legends.Add(Legend1)
+        ChartArea3.Name = "ChartArea1"
+        Me.crtLiveResults.ChartAreas.Add(ChartArea3)
+        Legend3.Name = "Legend1"
+        Me.crtLiveResults.Legends.Add(Legend3)
         Me.crtLiveResults.Location = New System.Drawing.Point(218, 103)
         Me.crtLiveResults.Name = "crtLiveResults"
-        Series1.ChartArea = "ChartArea1"
-        Series1.Legend = "Legend1"
-        Series1.Name = "Series1"
-        Me.crtLiveResults.Series.Add(Series1)
+        Series3.ChartArea = "ChartArea1"
+        Series3.Legend = "Legend1"
+        Series3.Name = "Series1"
+        Me.crtLiveResults.Series.Add(Series3)
         Me.crtLiveResults.Size = New System.Drawing.Size(384, 350)
         Me.crtLiveResults.TabIndex = 13
         Me.crtLiveResults.TabStop = False
@@ -188,16 +201,16 @@ Partial Class frmTCE
         '
         'crtResults
         '
-        ChartArea2.Name = "ChartArea1"
-        Me.crtResults.ChartAreas.Add(ChartArea2)
-        Legend2.Name = "Legend1"
-        Me.crtResults.Legends.Add(Legend2)
+        ChartArea4.Name = "ChartArea1"
+        Me.crtResults.ChartAreas.Add(ChartArea4)
+        Legend4.Name = "Legend1"
+        Me.crtResults.Legends.Add(Legend4)
         Me.crtResults.Location = New System.Drawing.Point(627, 103)
         Me.crtResults.Name = "crtResults"
-        Series2.ChartArea = "ChartArea1"
-        Series2.Legend = "Legend1"
-        Series2.Name = "Series1"
-        Me.crtResults.Series.Add(Series2)
+        Series4.ChartArea = "ChartArea1"
+        Series4.Legend = "Legend1"
+        Series4.Name = "Series1"
+        Me.crtResults.Series.Add(Series4)
         Me.crtResults.Size = New System.Drawing.Size(384, 350)
         Me.crtResults.TabIndex = 15
         Me.crtResults.TabStop = False
@@ -232,15 +245,6 @@ Partial Class frmTCE
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Final Results"
         '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(93, 19)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(157, 17)
-        Me.Label6.TabIndex = 18
-        Me.Label6.Text = "Pump for 5 W output"
-        '
         'lblEff
         '
         Me.lblEff.AutoSize = True
@@ -250,11 +254,101 @@ Partial Class frmTCE
         Me.lblEff.TabIndex = 19
         Me.lblEff.Text = "Efficiency"
         '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(93, 19)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(157, 17)
+        Me.Label6.TabIndex = 18
+        Me.Label6.Text = "Pump for 5 W output"
+        '
+        'GroupBox2
+        '
+        Me.GroupBox2.Controls.Add(Me.Button1)
+        Me.GroupBox2.Controls.Add(Me.Button2)
+        Me.GroupBox2.Controls.Add(Me.BtnEngPumpOff)
+        Me.GroupBox2.Controls.Add(Me.btnEngPumpOn)
+        Me.GroupBox2.Controls.Add(Me.Label7)
+        Me.GroupBox2.Controls.Add(Me.txtEngPumpI)
+        Me.GroupBox2.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox2.ForeColor = System.Drawing.Color.OrangeRed
+        Me.GroupBox2.Location = New System.Drawing.Point(39, 479)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(971, 137)
+        Me.GroupBox2.TabIndex = 19
+        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Text = "Engineering use only"
+        '
+        'Button1
+        '
+        Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button1.ForeColor = System.Drawing.Color.SaddleBrown
+        Me.Button1.Location = New System.Drawing.Point(784, 94)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 5
+        Me.Button1.Text = "Seed Off"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'Button2
+        '
+        Me.Button2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Button2.ForeColor = System.Drawing.Color.SaddleBrown
+        Me.Button2.Location = New System.Drawing.Point(684, 93)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(75, 23)
+        Me.Button2.TabIndex = 4
+        Me.Button2.Text = "Seed On"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
+        'BtnEngPumpOff
+        '
+        Me.BtnEngPumpOff.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.BtnEngPumpOff.Location = New System.Drawing.Point(321, 94)
+        Me.BtnEngPumpOff.Name = "BtnEngPumpOff"
+        Me.BtnEngPumpOff.Size = New System.Drawing.Size(75, 23)
+        Me.BtnEngPumpOff.TabIndex = 3
+        Me.BtnEngPumpOff.Text = "Laser Off"
+        Me.BtnEngPumpOff.UseVisualStyleBackColor = True
+        '
+        'btnEngPumpOn
+        '
+        Me.btnEngPumpOn.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnEngPumpOn.Location = New System.Drawing.Point(221, 93)
+        Me.btnEngPumpOn.Name = "btnEngPumpOn"
+        Me.btnEngPumpOn.Size = New System.Drawing.Size(75, 23)
+        Me.btnEngPumpOn.TabIndex = 2
+        Me.btnEngPumpOn.Text = "Laser On"
+        Me.btnEngPumpOn.UseVisualStyleBackColor = True
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.ForeColor = System.Drawing.Color.OrangeRed
+        Me.Label7.Location = New System.Drawing.Point(97, 75)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(65, 13)
+        Me.Label7.TabIndex = 1
+        Me.Label7.Text = "Current [mA]"
+        '
+        'txtEngPumpI
+        '
+        Me.txtEngPumpI.Location = New System.Drawing.Point(97, 94)
+        Me.txtEngPumpI.Name = "txtEngPumpI"
+        Me.txtEngPumpI.Size = New System.Drawing.Size(100, 23)
+        Me.txtEngPumpI.TabIndex = 0
+        '
+        'tmrStartLaser
+        '
+        '
         'frmTCE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1047, 639)
+        Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.crtResults)
         Me.Controls.Add(Me.Label5)
@@ -278,6 +372,8 @@ Partial Class frmTCE
         CType(Me.crtResults, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.GroupBox2.ResumeLayout(False)
+        Me.GroupBox2.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -303,4 +399,12 @@ Partial Class frmTCE
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents lblEff As Label
     Friend WithEvents Label6 As Label
+    Friend WithEvents GroupBox2 As GroupBox
+    Friend WithEvents Button1 As Button
+    Friend WithEvents Button2 As Button
+    Friend WithEvents BtnEngPumpOff As Button
+    Friend WithEvents btnEngPumpOn As Button
+    Friend WithEvents Label7 As Label
+    Friend WithEvents txtEngPumpI As TextBox
+    Friend WithEvents tmrStartLaser As Timer
 End Class
