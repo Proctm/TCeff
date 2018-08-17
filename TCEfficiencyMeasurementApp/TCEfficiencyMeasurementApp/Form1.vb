@@ -79,19 +79,42 @@ Public Class frmTCE
         itc.switchLdOutput(False)
     End Sub
 
+    Private Sub tmrStartExperiment_Tick(sender As Object, e As EventArgs) Handles tmrStartExperiment.Tick
+
+
+        Dim CSVString As String = ""
+
+        'Lets Check What we are logging
+        If Not IsNothing(pmForward) Then
+            crtLiveResults.Series(0).IsVisibleInLegend = True
+            crtLiveResults.Series(0).Points.AddY(CDbl(txtSeedP.Text))
+            CSVString &= "," & txtSeedP.Text
+        End If
+        If Not IsNothing(pmOut) Then
+            crtLiveResults.Series(1).IsVisibleInLegend = True
+            crtLiveResults.Series(1).Points.AddY(CDbl(txtOpP.Text))
+            CSVString &= "," & txtOpP.Text
+        End If
+        If Not IsNothing(pmBack) Then
+            crtLiveResults.Series(2).IsVisibleInLegend = True
+            crtLiveResults.Series(2).Points.AddY(CDbl(txtBRP.Text))
+            CSVString &= "," & txtBRP.Text
+        End If
+    End Sub
+
     Private Sub tmrStartLaser_Tick(sender As Object, e As EventArgs) Handles tmrStartLaser.Tick
 
         If initCount = 2 Then
-            'laser.Prop_Connect = True
+            laser.Prop_Connect = True
             writeToStatus("Laser starting....")
         ElseIf initCount = 4 Then
-            'laser.RS232SendCommand = "GS"
+            laser.RS232SendCommand = "GS"
             writeToStatus("Writing GS")
         ElseIf initCount = 6 Then
-            'laser.RS232SendCommand = "LCT0"
+            laser.RS232SendCommand = "LCT0"
             writeToStatus("Writing LCT0")
         ElseIf initCount = 8 Then
-            'laser.RS232SendCommand = "LR"
+            laser.RS232SendCommand = "LR"
             writeToStatus("Writing LR")
         ElseIf initCount > 10 Then
             writeToStatus("Laser intialised")

@@ -58,6 +58,7 @@ Partial Class frmTCE
         Me.Label7 = New System.Windows.Forms.Label()
         Me.txtEngPumpI = New System.Windows.Forms.TextBox()
         Me.tmrStartLaser = New System.Windows.Forms.Timer(Me.components)
+        Me.tmrStartExperiment = New System.Windows.Forms.Timer(Me.components)
         CType(Me.crtLiveResults, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.crtResults, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -343,6 +344,9 @@ Partial Class frmTCE
         'tmrStartLaser
         '
         '
+        'tmrStartExperiment
+        '
+        '
         'frmTCE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -407,4 +411,5 @@ Partial Class frmTCE
     Friend WithEvents Label7 As Label
     Friend WithEvents txtEngPumpI As TextBox
     Friend WithEvents tmrStartLaser As Timer
+    Friend WithEvents tmrStartExperiment As Timer
 End Class
