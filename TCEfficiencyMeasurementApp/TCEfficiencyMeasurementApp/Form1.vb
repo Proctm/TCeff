@@ -111,6 +111,7 @@ Public Class frmTCE
         Dim backP As Double
         'itc.switchTecOutput(True)
         'itc.switchLdOutput(True)
+
         backP = pmBack.PowerValue()
         writeToStatus("Power is " & backP & " W")
 
