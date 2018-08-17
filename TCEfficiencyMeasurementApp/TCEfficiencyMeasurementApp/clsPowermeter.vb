@@ -1,4 +1,5 @@
-﻿Imports Thorlabs.PM100D
+﻿Imports Thorlabs.PM100D_32.Interop
+
 Public Class cls_powermeter
     Private _PowerMeter As PM100D
     'At present power meters can only be Thorlabs Connected to any PM100 unit

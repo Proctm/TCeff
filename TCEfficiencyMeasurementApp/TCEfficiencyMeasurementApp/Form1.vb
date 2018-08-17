@@ -1,6 +1,6 @@
-﻿Imports NationalInstruments.Visa
+﻿Imports NationalInstruments.visa
 Imports Ivi.Visa
-Imports Thorlabs.PM100D
+Imports Thorlabs.PM100D_64
 Imports Thorlabs.TL4000
 
 Public Class frmTCE
@@ -8,6 +8,7 @@ Public Class frmTCE
     Dim laser As cls_SerialPorts
     Private itc As TL4000
     Dim initCount As Int64 = 0
+    Dim laserInit As Boolean = False
 
     Private Sub frmTCE_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Call Init_Form_PowerMeters()
@@ -34,16 +35,16 @@ Public Class frmTCE
                         pmForward.AutoRange = True
                         pmForward.Setlambda = 1550
 
-                    ElseIf IsNothing(pmBack) Then
-
-                        pmBack = New cls_powermeter(s, DirectCast(_mbSession, NationalInstruments.Visa.UsbSession).ModelName, DirectCast(_mbSession, NationalInstruments.Visa.UsbSession).UsbSerialNumber, 2)
-                        pmBack.AutoRange = True
-                        pmBack.Setlambda = 1550
-
                     ElseIf IsNothing(pmOut) Then
-                        pmOut = New cls_powermeter(s, DirectCast(_mbSession, NationalInstruments.Visa.UsbSession).ModelName, DirectCast(_mbSession, NationalInstruments.Visa.UsbSession).UsbSerialNumber, 3)
+
+                        pmOut = New cls_powermeter(s, DirectCast(_mbSession, NationalInstruments.Visa.UsbSession).ModelName, DirectCast(_mbSession, NationalInstruments.Visa.UsbSession).UsbSerialNumber, 2)
                         pmOut.AutoRange = True
                         pmOut.Setlambda = 1550
+
+                    ElseIf IsNothing(pmBack) Then
+                        pmBack = New cls_powermeter(s, DirectCast(_mbSession, NationalInstruments.Visa.UsbSession).ModelName, DirectCast(_mbSession, NationalInstruments.Visa.UsbSession).UsbSerialNumber, 3)
+                        pmBack.AutoRange = True
+                        pmBack.Setlambda = 1550
 
                     End If
                 End If
@@ -68,19 +69,14 @@ Public Class frmTCE
         txtSpoolId.Text = ""
     End Sub 'Empty spool id box on click
 
-    Private Sub initLaser()
-        tmrStartLaser.Start()
-        If laser.Prop_Connect = False Then
-            MsgBox("Laser Is NOT READY")
-        Else
-            MsgBox("PUMP LASER IS READY. Press OK to continue!")
-        End If
-    End Sub
-
     Private Sub writeToStatus(lineToWrite As String)
         Dim lineWithReturn As String
         lineWithReturn = lineToWrite & vbNewLine
         txtStatus.AppendText(lineWithReturn)
+    End Sub
+
+    Private Sub btnStopTest_Click(sender As Object, e As EventArgs) Handles btnStopTest.Click
+        itc.switchLdOutput(False)
     End Sub
 
     Private Sub tmrStartLaser_Tick(sender As Object, e As EventArgs) Handles tmrStartLaser.Tick
@@ -98,14 +94,25 @@ Public Class frmTCE
             'laser.RS232SendCommand = "LR"
             writeToStatus("Writing LR")
         ElseIf initCount > 10 Then
+            writeToStatus("Laser intialised")
+            laserInit = True
+            If laser.Prop_Connect = False Then
+                writeToStatus("Laser is not connected")
+            ElseIf laser.Prop_Connect = True Then
+                writeToStatus("Laser is connected")
+            End If
             tmrStartLaser.Stop()
-            initCount = 0
         End If
 
         initCount += 1
     End Sub
 
     Private Sub btnStartTest_Click(sender As Object, e As EventArgs) Handles btnStartTest.Click
-        initLaser()
+        Dim backP As Double
+        'itc.switchTecOutput(True)
+        'itc.switchLdOutput(True)
+        backP = pmBack.PowerValue()
+        writeToStatus("Power is " & backP & " W")
+
     End Sub
 End Class

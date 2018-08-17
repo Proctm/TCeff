@@ -23,12 +23,12 @@ Partial Class frmTCE
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim ChartArea4 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series4 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmTCE))
         Me.btnStartTest = New System.Windows.Forms.Button()
         Me.btnStopTest = New System.Windows.Forms.Button()
@@ -174,16 +174,16 @@ Partial Class frmTCE
         '
         'crtLiveResults
         '
-        ChartArea3.Name = "ChartArea1"
-        Me.crtLiveResults.ChartAreas.Add(ChartArea3)
-        Legend3.Name = "Legend1"
-        Me.crtLiveResults.Legends.Add(Legend3)
+        ChartArea1.Name = "ChartArea1"
+        Me.crtLiveResults.ChartAreas.Add(ChartArea1)
+        Legend1.Name = "Legend1"
+        Me.crtLiveResults.Legends.Add(Legend1)
         Me.crtLiveResults.Location = New System.Drawing.Point(218, 103)
         Me.crtLiveResults.Name = "crtLiveResults"
-        Series3.ChartArea = "ChartArea1"
-        Series3.Legend = "Legend1"
-        Series3.Name = "Series1"
-        Me.crtLiveResults.Series.Add(Series3)
+        Series1.ChartArea = "ChartArea1"
+        Series1.Legend = "Legend1"
+        Series1.Name = "Series1"
+        Me.crtLiveResults.Series.Add(Series1)
         Me.crtLiveResults.Size = New System.Drawing.Size(384, 350)
         Me.crtLiveResults.TabIndex = 13
         Me.crtLiveResults.TabStop = False
@@ -201,16 +201,16 @@ Partial Class frmTCE
         '
         'crtResults
         '
-        ChartArea4.Name = "ChartArea1"
-        Me.crtResults.ChartAreas.Add(ChartArea4)
-        Legend4.Name = "Legend1"
-        Me.crtResults.Legends.Add(Legend4)
+        ChartArea2.Name = "ChartArea1"
+        Me.crtResults.ChartAreas.Add(ChartArea2)
+        Legend2.Name = "Legend1"
+        Me.crtResults.Legends.Add(Legend2)
         Me.crtResults.Location = New System.Drawing.Point(627, 103)
         Me.crtResults.Name = "crtResults"
-        Series4.ChartArea = "ChartArea1"
-        Series4.Legend = "Legend1"
-        Series4.Name = "Series1"
-        Me.crtResults.Series.Add(Series4)
+        Series2.ChartArea = "ChartArea1"
+        Series2.Legend = "Legend1"
+        Series2.Name = "Series1"
+        Me.crtResults.Series.Add(Series2)
         Me.crtResults.Size = New System.Drawing.Size(384, 350)
         Me.crtResults.TabIndex = 15
         Me.crtResults.TabStop = False
