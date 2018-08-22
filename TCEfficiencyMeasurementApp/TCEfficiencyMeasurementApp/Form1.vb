@@ -182,6 +182,7 @@ Public Class frmTCE
 
         secondsElapsed = mainCount / 10
         txtElapsedTime.Text = secondsElapsed & " s"
+
         mainCount += 1
     End Sub
 
