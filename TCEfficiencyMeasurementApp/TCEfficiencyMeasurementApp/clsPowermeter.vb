@@ -85,6 +85,18 @@ Public Class cls_powermeter
         End Set
     End Property
 
+    Private _setRange As Double
+    Public Property setRange() As Double
+        Get
+            Return _setRange
+        End Get
+        Set(ByVal value As Double)
+            _PowerMeter.setPowerRange(value)
+            _setRange = value
+        End Set
+    End Property
+
+
     Private _Setlambda As Integer
     Public Property Setlambda() As Integer
         Get
@@ -99,7 +111,7 @@ Public Class cls_powermeter
 
 #Region "PowerMeter Functions and set wavelength"
     Private Function GetPower() As Double
-        Dim Power As Double = 0
+        Dim Power As Double
         _PowerMeter.measPower(Power)
         Return Power
     End Function

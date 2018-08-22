@@ -23,12 +23,12 @@ Partial Class frmTCE
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea7 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend7 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series7 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea8 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend8 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series8 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmTCE))
         Me.btnStartTest = New System.Windows.Forms.Button()
         Me.btnStopTest = New System.Windows.Forms.Button()
@@ -57,7 +57,8 @@ Partial Class frmTCE
         Me.btnEngPumpOn = New System.Windows.Forms.Button()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.txtEngPumpI = New System.Windows.Forms.TextBox()
-        Me.tmrStartLaser = New System.Windows.Forms.Timer(Me.components)
+        Me.tmrUpdatePower = New System.Windows.Forms.Timer(Me.components)
+        Me.tmrMain = New System.Windows.Forms.Timer(Me.components)
         CType(Me.crtLiveResults, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.crtResults, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -139,9 +140,9 @@ Partial Class frmTCE
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.Location = New System.Drawing.Point(357, 36)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(69, 13)
+        Me.Label2.Size = New System.Drawing.Size(67, 13)
         Me.Label2.TabIndex = 9
-        Me.Label2.Text = "Seed [mW]"
+        Me.Label2.Text = "Seed [uW]"
         '
         'Label3
         '
@@ -174,16 +175,16 @@ Partial Class frmTCE
         '
         'crtLiveResults
         '
-        ChartArea1.Name = "ChartArea1"
-        Me.crtLiveResults.ChartAreas.Add(ChartArea1)
-        Legend1.Name = "Legend1"
-        Me.crtLiveResults.Legends.Add(Legend1)
+        ChartArea7.Name = "ChartArea1"
+        Me.crtLiveResults.ChartAreas.Add(ChartArea7)
+        Legend7.Name = "Legend1"
+        Me.crtLiveResults.Legends.Add(Legend7)
         Me.crtLiveResults.Location = New System.Drawing.Point(218, 103)
         Me.crtLiveResults.Name = "crtLiveResults"
-        Series1.ChartArea = "ChartArea1"
-        Series1.Legend = "Legend1"
-        Series1.Name = "Series1"
-        Me.crtLiveResults.Series.Add(Series1)
+        Series7.ChartArea = "ChartArea1"
+        Series7.Legend = "Legend1"
+        Series7.Name = "Series1"
+        Me.crtLiveResults.Series.Add(Series7)
         Me.crtLiveResults.Size = New System.Drawing.Size(384, 350)
         Me.crtLiveResults.TabIndex = 13
         Me.crtLiveResults.TabStop = False
@@ -201,16 +202,16 @@ Partial Class frmTCE
         '
         'crtResults
         '
-        ChartArea2.Name = "ChartArea1"
-        Me.crtResults.ChartAreas.Add(ChartArea2)
-        Legend2.Name = "Legend1"
-        Me.crtResults.Legends.Add(Legend2)
+        ChartArea8.Name = "ChartArea1"
+        Me.crtResults.ChartAreas.Add(ChartArea8)
+        Legend8.Name = "Legend1"
+        Me.crtResults.Legends.Add(Legend8)
         Me.crtResults.Location = New System.Drawing.Point(627, 103)
         Me.crtResults.Name = "crtResults"
-        Series2.ChartArea = "ChartArea1"
-        Series2.Legend = "Legend1"
-        Series2.Name = "Series1"
-        Me.crtResults.Series.Add(Series2)
+        Series8.ChartArea = "ChartArea1"
+        Series8.Legend = "Legend1"
+        Series8.Name = "Series1"
+        Me.crtResults.Series.Add(Series8)
         Me.crtResults.Size = New System.Drawing.Size(384, 350)
         Me.crtResults.TabIndex = 15
         Me.crtResults.TabStop = False
@@ -340,7 +341,10 @@ Partial Class frmTCE
         Me.txtEngPumpI.Size = New System.Drawing.Size(100, 23)
         Me.txtEngPumpI.TabIndex = 0
         '
-        'tmrStartLaser
+        'tmrUpdatePower
+        '
+        '
+        'tmrMain
         '
         '
         'frmTCE
@@ -406,5 +410,6 @@ Partial Class frmTCE
     Friend WithEvents btnEngPumpOn As Button
     Friend WithEvents Label7 As Label
     Friend WithEvents txtEngPumpI As TextBox
-    Friend WithEvents tmrStartLaser As Timer
+    Friend WithEvents tmrUpdatePower As Timer
+    Friend WithEvents tmrMain As Timer
 End Class
