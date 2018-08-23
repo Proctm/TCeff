@@ -17,6 +17,7 @@ Public Class frmTCE
     Dim secondsElapsed, minDispl, secDispl As Int64
     Dim fullFileName As String
     Private AvgPower As Double()
+    Dim tempPowers, outList As New List(Of Double)
     Private Points As New List(Of PointF)()
 
     Private Sub frmTCE_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -109,6 +110,12 @@ Public Class frmTCE
         tmrMain.Stop()
         writeToStatus("Stopping test...")
     End Sub
+    Private Sub getAveragePower()
+        Dim averagePower As Double
+        averagePower = tempPowers.Average
+        outList.Add(averagePower)
+        tempPowers.Clear()
+    End Sub
 
     Private Sub tmrMain_Tick(sender As Object, e As EventArgs) Handles tmrMain.Tick
         If mainCount = 2 Then
@@ -137,41 +144,60 @@ Public Class frmTCE
             itc.switchLdOutput(True)
 
         End If
+        '-------- So this is a bit long, but essentially we've added some extra steps to ramp up slowly. Too quickly, and the PM
+        'will return NaN, which will trigger an alarm. The current is sent to the laser, the new threshold value set, and then the current is increased again to the target test value
 
-        If mainCount = 50 Then ' So this is a bit long, but essentially we've added some extra steps to ramp up slowly. Too quickly, and the PM
-            'will return NaN, which will trigger an alarm. The current is sent to the laser, the new threshold value set, and the nthe current is increased again to the target test value
+        If mainCount = 50 Then
             laser.RS232SendCommand = "LCT1000"
             writeToStatus("Setting current to 1 A")
             threshold = 0.2
+        ElseIf mainCount > 140 And mainCount < 150 Then
+            tempPowers.Add(outputP)
         ElseIf mainCount = 150 Then
+            getAveragePower()
             laser.RS232SendCommand = "LCT1250"
             writeToStatus("Setting current to 1.5 A")
         ElseIf mainCount = 360 Then
             laser.RS232SendCommand = "LCT1500"
             threshold = 0.7
+        ElseIf mainCount > 640 And mainCount < 650 Then
+            tempPowers.Add(outputP)
         ElseIf mainCount = 650 Then
+            getAveragePower()
             laser.RS232SendCommand = "LCT1750"
             writeToStatus("Setting current to 2 A")
         ElseIf mainCount = 660 Then
             laser.RS232SendCommand = "LCT2000"
             threshold = 1.3
+        ElseIf mainCount > 940 And mainCount < 950 Then
+            tempPowers.Add(outputP)
         ElseIf mainCount = 950 Then
+            getAveragePower()
             laser.RS232SendCommand = "LCT2250"
             writeToStatus("Setting current to 2.5 A")
         ElseIf mainCount = 970 Then
             laser.RS232SendCommand = "LCT2500"
             threshold = 1.8
+        ElseIf mainCount > 1240 And mainCount < 1250 Then
+            tempPowers.Add(outputP)
         ElseIf mainCount = 1250 Then
+            getAveragePower()
             laser.RS232SendCommand = "LCT2750"
             writeToStatus("Setting current to 3 A")
         ElseIf mainCount = 1270 Then
             laser.RS232SendCommand = "LCT3000"
             threshold = 2.35
+        ElseIf mainCount > 1540 And mainCount < 1550 Then
+            tempPowers.Add(outputP)
         ElseIf mainCount = 1550 Then
+            getAveragePower()
             laser.RS232SendCommand = "LCT3300"
             writeToStatus("Setting current to 3.3 A")
             threshold = 2.7
+        ElseIf mainCount > 1840 And mainCount < 1850 Then
+            tempPowers.Add(outputP)
         ElseIf mainCount = 1850 Then
+            getAveragePower()
             writeToStatus("Test finished. Shutting down pump laser...")
             threshold = -1
             laser.RS232SendCommand = "LCT1500"
@@ -350,7 +376,7 @@ Public Class frmTCE
         For jjj = 1 To pumpin.Count
             pts =
        {
-            New PointF(pumpin(jjj - 1), AvgPower(jjj - 1))
+            New PointF(pumpin(jjj - 1), outList(jjj - 1))
        }
             Points.Add(pts(0))
         Next
