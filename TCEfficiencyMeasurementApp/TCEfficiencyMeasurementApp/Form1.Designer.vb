@@ -23,12 +23,14 @@ Partial Class frmTCE
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea7 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend7 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series7 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim ChartArea8 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend8 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series8 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series4 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmTCE))
         Me.btnStartTest = New System.Windows.Forms.Button()
         Me.btnStopTest = New System.Windows.Forms.Button()
@@ -175,16 +177,34 @@ Partial Class frmTCE
         '
         'crtLiveResults
         '
-        ChartArea7.Name = "ChartArea1"
-        Me.crtLiveResults.ChartAreas.Add(ChartArea7)
-        Legend7.Name = "Legend1"
-        Me.crtLiveResults.Legends.Add(Legend7)
+        ChartArea1.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.[True]
+        ChartArea1.Name = "ChartArea1"
+        Me.crtLiveResults.ChartAreas.Add(ChartArea1)
+        Legend1.Name = "Legend1"
+        Legend1.Position.Auto = False
+        Legend1.Position.Height = 14.89971!
+        Legend1.Position.Width = 30.0!
+        Legend1.Position.X = 70.0!
+        Me.crtLiveResults.Legends.Add(Legend1)
         Me.crtLiveResults.Location = New System.Drawing.Point(218, 103)
         Me.crtLiveResults.Name = "crtLiveResults"
-        Series7.ChartArea = "ChartArea1"
-        Series7.Legend = "Legend1"
-        Series7.Name = "Series1"
-        Me.crtLiveResults.Series.Add(Series7)
+        Series1.ChartArea = "ChartArea1"
+        Series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
+        Series1.Legend = "Legend1"
+        Series1.Name = "Output power"
+        Series2.ChartArea = "ChartArea1"
+        Series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
+        Series2.Legend = "Legend1"
+        Series2.Name = "Back reflection"
+        Series2.YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary
+        Series3.ChartArea = "ChartArea1"
+        Series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
+        Series3.Legend = "Legend1"
+        Series3.Name = "Seed power"
+        Series3.YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary
+        Me.crtLiveResults.Series.Add(Series1)
+        Me.crtLiveResults.Series.Add(Series2)
+        Me.crtLiveResults.Series.Add(Series3)
         Me.crtLiveResults.Size = New System.Drawing.Size(384, 350)
         Me.crtLiveResults.TabIndex = 13
         Me.crtLiveResults.TabStop = False
@@ -202,16 +222,16 @@ Partial Class frmTCE
         '
         'crtResults
         '
-        ChartArea8.Name = "ChartArea1"
-        Me.crtResults.ChartAreas.Add(ChartArea8)
-        Legend8.Name = "Legend1"
-        Me.crtResults.Legends.Add(Legend8)
+        ChartArea2.Name = "ChartArea1"
+        Me.crtResults.ChartAreas.Add(ChartArea2)
+        Legend2.Name = "Legend1"
+        Me.crtResults.Legends.Add(Legend2)
         Me.crtResults.Location = New System.Drawing.Point(627, 103)
         Me.crtResults.Name = "crtResults"
-        Series8.ChartArea = "ChartArea1"
-        Series8.Legend = "Legend1"
-        Series8.Name = "Series1"
-        Me.crtResults.Series.Add(Series8)
+        Series4.ChartArea = "ChartArea1"
+        Series4.Legend = "Legend1"
+        Series4.Name = "Series1"
+        Me.crtResults.Series.Add(Series4)
         Me.crtResults.Size = New System.Drawing.Size(384, 350)
         Me.crtResults.TabIndex = 15
         Me.crtResults.TabStop = False

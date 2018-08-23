@@ -1,7 +1,8 @@
-﻿Imports NationalInstruments.visa
+﻿Imports NationalInstruments.Visa
 Imports Ivi.Visa
 Imports Thorlabs.PM100D_64
 Imports Thorlabs.TL4000
+Imports System.IO
 
 Public Class frmTCE
     Dim pmBack, pmForward, pmOut As cls_powermeter
@@ -15,9 +16,12 @@ Public Class frmTCE
     Dim updateCount As Int64 = 0 ' Count for filling in power
     Dim secondsElapsed, minDispl, secDispl As Int64
 
+
     Private Sub frmTCE_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Call Init_Form_PowerMeters()
         Call Init_Form_Laser()
+        minDispl = 0
+        secDispl = 0
         itc = New TL4000("USB0::4883::32847::M00284646::INSTR", True, False)
 
     End Sub
@@ -184,13 +188,13 @@ Public Class frmTCE
 
         If Not IsNothing(pmBack) Then
             crtLiveResults.Series(0).IsVisibleInLegend = True
-            crtLiveResults.Series(0).Points.AddY(CDbl(backP))
-            CSVString &= "," & backP
+            crtLiveResults.Series(0).Points.AddY(CDbl(outputP))
+            CSVString &= "," & outputP
         End If
         If Not IsNothing(pmOut) Then
             crtLiveResults.Series(1).IsVisibleInLegend = True
-            crtLiveResults.Series(1).Points.AddY(CDbl(outputP))
-            CSVString &= "," & outputP
+            crtLiveResults.Series(1).Points.AddY(CDbl(backP))
+            CSVString &= "," & backP
 
         End If
         If Not IsNothing(pmForward) Then
@@ -200,7 +204,9 @@ Public Class frmTCE
         End If
 
         secondsElapsed = mainCount / 10
-        minDispl = Math.Round(secondsElapsed / 60, 0)
+        If secondsElapsed = 60 Or secondsElapsed = 120 Or secondsElapsed = 180 Or secondsElapsed = 240 Or secondsElapsed = 300 Then
+            minDispl += 1
+        End If
         secDispl = secondsElapsed - 60 * minDispl
         txtElapsedTime.Text = minDispl & " : " & secDispl
         mainCount += 1
