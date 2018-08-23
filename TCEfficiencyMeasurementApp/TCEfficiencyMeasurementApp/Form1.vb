@@ -296,6 +296,7 @@ Public Class frmTCE
     Private Sub btnStartTest_Click(sender As Object, e As EventArgs) Handles btnStartTest.Click
         itc.switchTecOutput(True)
         itc.switchLdOutput(True)
+        itc.setLdCurrSetpoint(0.54)
         MsgBox("Wait for seed power to display ~700 uW")
         tmrMain.Start()
 
@@ -312,7 +313,7 @@ Public Class frmTCE
         Dim sData() As String
         Dim arrName, arrValue As New List(Of Double)()
 
-        Using sr As New StreamReader(fullfilename)
+        Using sr As New StreamReader(fullFileName)
             While Not sr.EndOfStream
                 sData = sr.ReadLine().Split(","c)
 
@@ -348,8 +349,8 @@ Public Class frmTCE
         AvgPower = New Double(5) {}
 
         For kk = 0 To 5
-            Dim kkVal As Long = kk ' We can potentially delete this line if it fucks everything up
-            Dim matchedItems() As Double = Array.FindAll(dataTime, Function(x) x >= lBound(kkVal) And x <= UBound(kkVal))
+
+            Dim matchedItems() As Double = Array.FindAll(dataTime, Function(x) x >= lBound(kk) And x <= UBound(kk))
             Dim sss As Double()
             sss = New Double(matchedItems.Length - 1) {}
             For i = 0 To matchedItems.Length - 1

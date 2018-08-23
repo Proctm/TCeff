@@ -229,6 +229,7 @@ Partial Class frmTCE
         Me.crtResults.Location = New System.Drawing.Point(627, 103)
         Me.crtResults.Name = "crtResults"
         Series4.ChartArea = "ChartArea1"
+        Series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
         Series4.Legend = "Legend1"
         Series4.Name = "Series1"
         Me.crtResults.Series.Add(Series4)
