@@ -15,7 +15,9 @@ Public Class frmTCE
     Dim mainCount As Int64 = 0 ' Count for the main loop
     Dim updateCount As Int64 = 0 ' Count for filling in power
     Dim secondsElapsed, minDispl, secDispl As Int64
-
+    Dim fullFileName As String
+    Private AvgPower As Double()
+    Private Points As New List(Of PointF)()
 
     Private Sub frmTCE_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Call Init_Form_PowerMeters()
@@ -129,6 +131,11 @@ Public Class frmTCE
             ElseIf laser.Prop_Connect = True Then
                 writeToStatus("Laser is connected")
             End If
+        ElseIf mainCount = 15 Then
+            itc.setLdCurrSetpoint(0.54)
+            itc.switchTecOutput(True)
+            itc.switchLdOutput(True)
+
         End If
 
         If mainCount = 50 Then ' So this is a bit long, but essentially we've added some extra steps to ramp up slowly. Too quickly, and the PM
@@ -168,9 +175,15 @@ Public Class frmTCE
             writeToStatus("Test finished. Shutting down pump laser...")
             threshold = -1
             laser.RS232SendCommand = "LCT1500"
+
+            DataAnalysis()
+        ElseIf mainCount = 1860 Then
+            itc.switchLdOutput(False)
+            itc.switchTecOutput(False)
         ElseIf mainCount = 1870 Then
             laser.RS232SendCommand = "LCT0"
         End If
+        '----------------------------- This is the alarm section, which is always looking for NaN or power < threshold
         If mainCount > 60 And outputP < threshold Then ' I will start looking for an alarm 1 second after the first ramp
             laser.RS232SendCommand = "LCT0"
             writeToStatus("Quick drop alarm (went below " & threshold & " W or returned NaN)")
@@ -202,7 +215,19 @@ Public Class frmTCE
             crtLiveResults.Series(2).Points.AddY(CDbl(inputP))
             CSVString &= "," & inputP
         End If
+        '-----------------opens up my raw data file (only once though)
+        If mainCount = 0 Then
+            Dim path As String = "\\FCHO-SBS-1\Public2\Eng\Data\Doped\TCtestDB\"
+            Dim fileID As String = txtSpoolId.Text.Replace("/", "_").Replace("\", "_").Replace("-", "_").Replace(" ", "_")
+            Dim testdate As DateTime = Now
+            fullFileName = path & fileID & ".csv"
 
+            'Dim outFile As IO.StreamWriter = My.Computer.FileSystem.OpenTextFileWriter(fullfilename, False)
+            fullFileName = CheckFile(fullFileName)
+            Dim fs As FileStream = File.Create(fullFileName, FileMode.Open)
+            fs.Close()
+        End If
+        '---------------Following is my timer code which doesn't work well
         secondsElapsed = mainCount / 10
         If secondsElapsed = 60 Or secondsElapsed = 120 Or secondsElapsed = 180 Or secondsElapsed = 240 Or secondsElapsed = 300 Then
             minDispl += 1
@@ -210,8 +235,37 @@ Public Class frmTCE
         secDispl = secondsElapsed - 60 * minDispl
         txtElapsedTime.Text = minDispl & " : " & secDispl
         mainCount += 1
+        '-------------------Try to write to csv every second
+        If Math.Round(mainCount / 10, 0) = mainCount / 10 Then
+            WritetoCSV(CSVString)
+        End If
     End Sub
 
+    Private Sub WritetoCSV(ByVal CSVString As String)
+        Dim file As System.IO.StreamWriter
+        file = My.Computer.FileSystem.OpenTextFileWriter(fullFileName, True)
+        file.WriteLine(secondsElapsed & CSVString)
+        file.Close()
+    End Sub
+
+    Public Function CheckFile(ByVal NameFile As String)
+        'function to change savename if about to overwrite a previous measurement
+        'Works for files with .*** at end, will not currently cope with anything other than 3 letter extensions
+
+        Dim TmpName As String
+        Dim I As Integer
+
+        TmpName = NameFile
+        I = 1
+
+        Do While File.Exists(TmpName) = True
+            TmpName = Strings.Left(NameFile, Len(NameFile) - 4) & "-" & Format(I, "##") _
+            & Strings.Right(NameFile, 4)
+            I = I + 1
+        Loop
+        CheckFile = TmpName
+
+    End Function
 
     Private Sub btnStartTest_Click(sender As Object, e As EventArgs) Handles btnStartTest.Click
         itc.switchTecOutput(True)
@@ -220,6 +274,13 @@ Public Class frmTCE
         tmrMain.Start()
 
     End Sub
+    Function getAverage(y As Double()) As Double
+        Dim z As Double
+        For Each i As Double In y
+            z += i
+        Next
+        Return z / y.Length
+    End Function
     Private Sub DataAnalysis()
 
         Dim sData() As String
@@ -261,23 +322,19 @@ Public Class frmTCE
         AvgPower = New Double(5) {}
 
         For kk = 0 To 5
-
-            Dim matchedItems() As Double = Array.FindAll(dataTime, Function(x) x >= lBound(kk) And x <= UBound(kk))
-            'Dim ddd() As Double
+            Dim kkVal As Long = kk ' We can potentially delete this line if it fucks everything up
+            Dim matchedItems() As Double = Array.FindAll(dataTime, Function(x) x >= lBound(kkVal) And x <= UBound(kkVal))
+            Dim sss As Double()
             sss = New Double(matchedItems.Length - 1) {}
             For i = 0 To matchedItems.Length - 1
 
                 Dim gg As Integer = Array.IndexOf(dataTime, matchedItems(i))
                 Dim ddd As Double = dataValue.GetValue(gg)
-                'sss = New Double(matchedItems.Length - 1) {}
                 sss(i) = ddd
 
             Next i
 
             Dim avgValue As Double = getAverage(sss)
-            ' AvgPower = New Double(2) {}
-            'AvgPower(k) = (1 / 0.804195) * avgValue
-            ' AvgPower(kk) = (1 / 0.782178) * avgValue 'calibrated at 20/9/2017
             AvgPower(kk) = (1 / 0.935) * avgValue 'Combiner loss considered.
 
         Next kk
@@ -308,16 +365,14 @@ Public Class frmTCE
         Dim newpumpPower As Double = pumpPower * 1.0 '0.86 I don't think this is right.. MBP
 
 
-        TextBox8.Text = Format(newpumpPower, "0.00") '0.86 : Pump wavelength comepensation due to new pump laser wavelength 
-        TextBox4.Text = Format((5 / newpumpPower) * 100, "0.00")
-
-        'Dim results() As String = {TextBox1.Text, _elapseStartTime.ToString, TextBox7.Text, TextBox6.Text}
+        txtFinalPump.Text = Format(newpumpPower, "0.00") '0.86 : Pump wavelength comepensation due to new pump laser wavelength 
+        txtFinalEff.Text = Format((5 / newpumpPower) * 100, "0.00")
 
 
         Dim filedb As System.IO.StreamWriter
         Dim filedbname As String
         filedbname = "\\FCHO-SBS-1\Public2\Eng\Data\Doped\TCtestDB\DoNOTdelete\filedB.csv"
-        Dim Results As String = TextBox5.Text & "," & _elapseStartTime.ToString & "," & TextBox8.Text & "," & TextBox4.Text
+        Dim Results As String = txtSpoolId.Text & "," & secondsElapsed & "," & txtFinalPump.Text & "," & txtFinalEff.Text
 
         If IO.File.Exists(filedbname) Then
             'Dim Results As String = TextBox1.Text & "," & _elapseStartTime.ToString & "," & TextBox7.Text & "," & TextBox6.Text
@@ -339,9 +394,48 @@ Public Class frmTCE
         'Points.Add(pumpin(0), AvgPower(0))
 
 
-        Chart2.Series(0).IsVisibleInLegend = True
-        Chart2.Series(0).Points.DataBindXY(pumpin, AvgPower)
+        crtResults.Series(0).IsVisibleInLegend = True
+        crtResults.Series(0).Points.DataBindXY(pumpin, AvgPower)
 
         Points.Clear()
     End Sub
+
+    Public Function FindLinearLeastSquaresFit(ByVal points As _
+ List(Of PointF), ByRef m As Double, ByRef b As Double) _
+ As Double
+        'Public Function FindLinearLeastSquaresFit(ByVal pumpin() As Array _
+        ' , ByVal AvgPower() As Array, ByRef m As Double, ByRef b As Double) _
+        ' As Double
+        ' Perform the calculation.
+        ' Find the values S1, Sx, Sy, Sxx, and Sxy.
+        Dim S1 As Double = points.Count
+        Dim Sx As Double = 0
+        Dim Sy As Double = 0
+        Dim Sxx As Double = 0
+        Dim Sxy As Double = 0
+        Dim ppp As New List(Of Double)
+
+
+        For Each pt As PointF In points
+            Sx += pt.X
+            Sy += pt.Y
+            Sxx += pt.X * pt.X
+            Sxy += pt.X * pt.Y
+        Next pt
+
+        ' Solve for m and b.
+        m = (Sxy * S1 - Sx * Sy) / (Sxx * S1 - Sx * Sx)
+        b = (Sxy * Sx - Sy * Sxx) / (Sx * Sx - S1 * Sxx)
+
+        Return Math.Sqrt(ErrorSquared(points, m, b))
+
+    End Function
+    Public Function ErrorSquared(ByVal points As List(Of PointF), ByVal m As Double, ByVal b As Double) As Double
+        Dim total As Double = 0
+        For Each pt As PointF In points
+            Dim dy As Double = pt.Y - (m * pt.X + b)
+            total += dy * dy
+        Next pt
+        Return total
+    End Function
 End Class
