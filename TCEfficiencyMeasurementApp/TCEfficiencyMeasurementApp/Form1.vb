@@ -321,6 +321,7 @@ Public Class frmTCE
                 arrValue.Add(sData(2).Trim())
 
             End While
+
         End Using
 
         Dim dataTime() As Double = arrName.ToArray
