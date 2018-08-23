@@ -13,7 +13,7 @@ Public Class frmTCE
     Dim threshold As Double = 0.4 ' This is the lowest required threshold value, and must be changed when we ramp up power
     Dim mainCount As Int64 = 0 ' Count for the main loop
     Dim updateCount As Int64 = 0 ' Count for filling in power
-    Dim secondsElapsed As Int64
+    Dim secondsElapsed, minDispl, secDispl As Int64
 
     Private Sub frmTCE_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Call Init_Form_PowerMeters()
@@ -127,7 +127,8 @@ Public Class frmTCE
             End If
         End If
 
-        If mainCount = 50 Then
+        If mainCount = 50 Then ' So this is a bit long, but essentially we've added some extra steps to ramp up slowly. Too quickly, and the PM
+            'will return NaN, which will trigger an alarm. The current is sent to the laser, the new threshold value set, and the nthe current is increased again to the target test value
             laser.RS232SendCommand = "LCT1000"
             writeToStatus("Setting current to 1 A")
             threshold = 0.2
@@ -148,7 +149,6 @@ Public Class frmTCE
             writeToStatus("Setting current to 2.5 A")
         ElseIf mainCount = 970 Then
             laser.RS232SendCommand = "LCT2500"
-            writeToStatus("Matt, this failed after the ramp to 2.5")
             threshold = 1.8
         ElseIf mainCount = 1250 Then
             laser.RS232SendCommand = "LCT2750"
@@ -179,18 +179,163 @@ Public Class frmTCE
             laser.RS232SendCommand = "LCT0"
             tmrMain.Stop()
         End If
+        '----------------------------- The next section handles plotting and creating csv string for data dump
+        Dim CSVString As String = ""
+
+        If Not IsNothing(pmBack) Then
+            crtLiveResults.Series(0).IsVisibleInLegend = True
+            crtLiveResults.Series(0).Points.AddY(CDbl(backP))
+            CSVString &= "," & backP
+        End If
+        If Not IsNothing(pmOut) Then
+            crtLiveResults.Series(1).IsVisibleInLegend = True
+            crtLiveResults.Series(1).Points.AddY(CDbl(outputP))
+            CSVString &= "," & outputP
+
+        End If
+        If Not IsNothing(pmForward) Then
+            crtLiveResults.Series(2).IsVisibleInLegend = True
+            crtLiveResults.Series(2).Points.AddY(CDbl(inputP))
+            CSVString &= "," & inputP
+        End If
 
         secondsElapsed = mainCount / 10
-        txtElapsedTime.Text = secondsElapsed & " s"
+        minDispl = Math.Round(secondsElapsed / 60, 0)
+        secDispl = secondsElapsed - 60 * minDispl
+        txtElapsedTime.Text = minDispl & " : " & secDispl
         mainCount += 1
     End Sub
 
 
     Private Sub btnStartTest_Click(sender As Object, e As EventArgs) Handles btnStartTest.Click
-        Dim backP As Double
-        'itc.switchTecOutput(True)
-        'itc.switchLdOutput(True)
+        itc.switchTecOutput(True)
+        itc.switchLdOutput(True)
+        MsgBox("Wait for seed power to display ~700 uW")
         tmrMain.Start()
 
+    End Sub
+    Private Sub DataAnalysis()
+
+        Dim sData() As String
+        Dim arrName, arrValue As New List(Of Double)()
+
+        Using sr As New StreamReader(fullfilename)
+            While Not sr.EndOfStream
+                sData = sr.ReadLine().Split(","c)
+
+                arrName.Add(sData(0).Trim())
+                arrValue.Add(sData(2).Trim())
+
+            End While
+        End Using
+
+        Dim dataTime() As Double = arrName.ToArray
+        Dim dataValue() As Double = arrValue.ToArray
+
+        Dim lBound(5) As Double
+        Dim UBound(5) As Double
+
+        lBound(0) = 75
+        lBound(1) = 135
+        lBound(2) = 195
+        lBound(3) = 255
+        lBound(4) = 315
+        lBound(5) = 375
+
+        UBound(0) = lBound(0) + 35
+        UBound(1) = lBound(1) + 35
+        UBound(2) = lBound(2) + 35
+        UBound(3) = lBound(3) + 35
+        UBound(4) = lBound(4) + 35
+        UBound(5) = lBound(5) + 35
+
+
+        'Dim lBound As Double = 25
+        'Dim uBound As Double = 35
+        AvgPower = New Double(5) {}
+
+        For kk = 0 To 5
+
+            Dim matchedItems() As Double = Array.FindAll(dataTime, Function(x) x >= lBound(kk) And x <= UBound(kk))
+            'Dim ddd() As Double
+            sss = New Double(matchedItems.Length - 1) {}
+            For i = 0 To matchedItems.Length - 1
+
+                Dim gg As Integer = Array.IndexOf(dataTime, matchedItems(i))
+                Dim ddd As Double = dataValue.GetValue(gg)
+                'sss = New Double(matchedItems.Length - 1) {}
+                sss(i) = ddd
+
+            Next i
+
+            Dim avgValue As Double = getAverage(sss)
+            ' AvgPower = New Double(2) {}
+            'AvgPower(k) = (1 / 0.804195) * avgValue
+            ' AvgPower(kk) = (1 / 0.782178) * avgValue 'calibrated at 20/9/2017
+            AvgPower(kk) = (1 / 0.935) * avgValue 'Combiner loss considered.
+
+        Next kk
+
+        'Dim pumpin() As Double = {1.14, 5.41, 9.5, 13.7, 18.0, 22.3} 'before
+        'Dim pumpin() As Double = {0.74, 2.49, 8.32, 14.12, 19.8, 25.4} 'calibrated at 29/9/2017
+        'Dim pumpin() As Double = {8.32, 14.12, 19.8, 22.6, 25.4, 28.1} 'calibrated at 29/9/2017
+        'Dim pumpin() As Double = {2.49, 8.32, 14.12, 19.8, 22.6, 25.4} 'calibrated at 29/9/2017
+        'Dim pumpin() As Double = {2.43, 8.17, 13.9, 19.5, 22.3, 25.0} 'calibrated on 2/8/18 MBP
+        Dim pumpin() As Double = {2.23, 4.87, 7.54, 10.21, 12.8, 14.4} 'calibrated on 15/8/18 MBP following rework
+        Dim pts() As PointF
+
+        For jjj = 1 To pumpin.Count
+            pts =
+       {
+            New PointF(pumpin(jjj - 1), AvgPower(jjj - 1))
+       }
+            Points.Add(pts(0))
+        Next
+
+        Dim slope As Double
+        Dim intercept As Double
+
+        FindLinearLeastSquaresFit(Points, slope, intercept)
+
+        Dim pumpPower As Double
+        pumpPower = (5 - intercept) / slope
+        Dim newpumpPower As Double = pumpPower * 1.0 '0.86 I don't think this is right.. MBP
+
+
+        TextBox8.Text = Format(newpumpPower, "0.00") '0.86 : Pump wavelength comepensation due to new pump laser wavelength 
+        TextBox4.Text = Format((5 / newpumpPower) * 100, "0.00")
+
+        'Dim results() As String = {TextBox1.Text, _elapseStartTime.ToString, TextBox7.Text, TextBox6.Text}
+
+
+        Dim filedb As System.IO.StreamWriter
+        Dim filedbname As String
+        filedbname = "\\FCHO-SBS-1\Public2\Eng\Data\Doped\TCtestDB\DoNOTdelete\filedB.csv"
+        Dim Results As String = TextBox5.Text & "," & _elapseStartTime.ToString & "," & TextBox8.Text & "," & TextBox4.Text
+
+        If IO.File.Exists(filedbname) Then
+            'Dim Results As String = TextBox1.Text & "," & _elapseStartTime.ToString & "," & TextBox7.Text & "," & TextBox6.Text
+            filedb = My.Computer.FileSystem.OpenTextFileWriter(filedbname, True)
+            filedb.WriteLine(Results)
+            filedb.Close()
+
+        Else
+            Dim fdbs As FileStream = File.Create(filedbname)
+            fdbs.Close()
+            filedb = My.Computer.FileSystem.OpenTextFileWriter(filedbname, True)
+            filedb.WriteLine(Results)
+            filedb.Close()
+        End If
+
+
+        'Dim Points As New List(Of List(Of Point))
+        'Dim pts() As Double = {New (X)}
+        'Points.Add(pumpin(0), AvgPower(0))
+
+
+        Chart2.Series(0).IsVisibleInLegend = True
+        Chart2.Series(0).Points.DataBindXY(pumpin, AvgPower)
+
+        Points.Clear()
     End Sub
 End Class
