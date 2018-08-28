@@ -16,6 +16,7 @@ Public Class frmTCE
     Dim updateCount As Int64 = 0 ' Count for filling in power
     Dim secondsElapsed, minDispl, secDispl As Int64
     Dim fullFileName As String
+    Dim mainCountForTimer As Double
     Private AvgPower As Double()
     Dim tempPowers, outList As New List(Of Double)
     Private Points As New List(Of PointF)()
@@ -203,13 +204,12 @@ Public Class frmTCE
             writeToStatus("Test finished. Shutting down pump laser...")
             threshold = -1
             laser.RS232SendCommand = "LCT1500"
-
+            laser.RS232SendCommand = "LCT0"
             DataAnalysis()
-        ElseIf mainCount = 1860 Then
+        ElseIf mainCount = 1660 Then
             itc.switchLdOutput(False)
             itc.switchTecOutput(False)
-        ElseIf mainCount = 1870 Then
-            laser.RS232SendCommand = "LCT0"
+            tmrMain.Stop()
         End If
         '----------------------------- This is the alarm section, which is always looking for NaN or power < threshold
         If mainCount > 70 And outputP < threshold Then ' I will start looking for an alarm 1 second after the first ramp
@@ -218,7 +218,7 @@ Public Class frmTCE
             laser.RS232SendCommand = "LCT0"
             tmrMain.Stop()
         End If
-        If mainCount < 1850 And Double.IsNaN(outputP) Then
+        If mainCount < 1650 And Double.IsNaN(outputP) Then
             laser.RS232SendCommand = "LCT0"
             writeToStatus("Quick drop alarm (returned NaN)")
             laser.RS232SendCommand = "LCT0"
@@ -256,8 +256,9 @@ Public Class frmTCE
             fs.Close()
         End If
         '---------------Following is my timer code which doesn't work well
-        secondsElapsed = mainCount / 10
-        If secondsElapsed = 60 Or secondsElapsed = 120 Or secondsElapsed = 180 Or secondsElapsed = 240 Or secondsElapsed = 300 Then
+        mainCountForTimer = mainCount
+        secondsElapsed = mainCountForTimer / 10.0
+        If mainCount = 600 Or mainCount = 1200 Or mainCount = 1800 Or mainCount = 2400 Or mainCount = 3000 Then
             minDispl += 1
         End If
         secDispl = secondsElapsed - 60 * minDispl
@@ -268,6 +269,7 @@ Public Class frmTCE
             WritetoCSV(CSVString)
         End If
     End Sub
+
 
     Private Sub WritetoCSV(ByVal CSVString As String)
         Dim file As System.IO.StreamWriter
@@ -300,6 +302,11 @@ Public Class frmTCE
         itc.switchLdOutput(True)
         itc.setLdCurrSetpoint(0.54)
         MsgBox("Wait for seed power to display ~700 uW")
+
+        mainCount = 0
+        Points.Clear()
+        tempPowers.Clear()
+        outList.Clear()
         tmrMain.Start()
 
     End Sub

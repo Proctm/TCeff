@@ -178,6 +178,8 @@ Partial Class frmTCE
         'crtLiveResults
         '
         ChartArea1.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.[True]
+        ChartArea1.AxisY2.LineColor = System.Drawing.Color.Transparent
+        ChartArea1.IsSameFontSizeForAllAxes = True
         ChartArea1.Name = "ChartArea1"
         Me.crtLiveResults.ChartAreas.Add(ChartArea1)
         Legend1.Name = "Legend1"
@@ -185,6 +187,7 @@ Partial Class frmTCE
         Legend1.Position.Height = 14.89971!
         Legend1.Position.Width = 30.0!
         Legend1.Position.X = 70.0!
+        Legend1.Position.Y = 80.0!
         Me.crtLiveResults.Legends.Add(Legend1)
         Me.crtLiveResults.Location = New System.Drawing.Point(218, 103)
         Me.crtLiveResults.Name = "crtLiveResults"
