@@ -56,6 +56,7 @@ Public Class frmTCE
                         pmOut.AutoRange = False
                         pmOut.setRange = 8
                         pmOut.Setlambda = 1550
+                        pmOut.setAcceleration = False
 
                     ElseIf IsNothing(pmBack) Then
                         pmBack = New cls_powermeter(s, DirectCast(_mbSession, NationalInstruments.Visa.UsbSession).ModelName, DirectCast(_mbSession, NationalInstruments.Visa.UsbSession).UsbSerialNumber, 3)

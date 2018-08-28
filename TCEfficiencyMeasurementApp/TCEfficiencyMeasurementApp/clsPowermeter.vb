@@ -96,6 +96,17 @@ Public Class cls_powermeter
         End Set
     End Property
 
+    Private _setAcceleration As Boolean
+    Public Property setAcceleration() As Boolean
+        Get
+            Return _setAcceleration
+        End Get
+        Set(value As Boolean)
+            _PowerMeter.setAccelState(value)
+            _setAcceleration = value
+        End Set
+    End Property
+
 
     Private _Setlambda As Integer
     Public Property Setlambda() As Integer
