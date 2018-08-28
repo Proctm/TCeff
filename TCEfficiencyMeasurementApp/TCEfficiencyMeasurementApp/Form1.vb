@@ -157,46 +157,48 @@ Public Class frmTCE
             getAveragePower()
             laser.RS232SendCommand = "LCT1250"
             writeToStatus("Setting current to 1.5 A")
-        ElseIf mainCount = 360 Then
+        ElseIf mainCount = 170 Then
             laser.RS232SendCommand = "LCT1500"
-            threshold = 0.7
-        ElseIf mainCount > 640 And mainCount < 650 Then
+            threshold = 0.5
+        ElseIf mainCount > 440 And mainCount < 450 Then
             tempPowers.Add(outputP)
-        ElseIf mainCount = 650 Then
+        ElseIf mainCount = 450 Then
             getAveragePower()
-            laser.RS232SendCommand = "LCT1750"
+            laser.RS232SendCommand = "LCT1700"
             writeToStatus("Setting current to 2 A")
-        ElseIf mainCount = 660 Then
-            laser.RS232SendCommand = "LCT2000"
+        ElseIf mainCount = 460 Then
+            laser.RS232SendCommand = "LCT1850"
             threshold = 1.3
-        ElseIf mainCount > 940 And mainCount < 950 Then
+        ElseIf mainCount = 470 Then
+            laser.RS232SendCommand = "LCT2000"
+        ElseIf mainCount > 740 And mainCount < 750 Then
             tempPowers.Add(outputP)
-        ElseIf mainCount = 950 Then
+        ElseIf mainCount = 750 Then
             getAveragePower()
             laser.RS232SendCommand = "LCT2250"
             writeToStatus("Setting current to 2.5 A")
-        ElseIf mainCount = 970 Then
+        ElseIf mainCount = 770 Then
             laser.RS232SendCommand = "LCT2500"
             threshold = 1.8
-        ElseIf mainCount > 1240 And mainCount < 1250 Then
+        ElseIf mainCount > 1040 And mainCount < 1050 Then
             tempPowers.Add(outputP)
-        ElseIf mainCount = 1250 Then
+        ElseIf mainCount = 1050 Then
             getAveragePower()
             laser.RS232SendCommand = "LCT2750"
             writeToStatus("Setting current to 3 A")
-        ElseIf mainCount = 1270 Then
+        ElseIf mainCount = 1070 Then
             laser.RS232SendCommand = "LCT3000"
             threshold = 2.35
-        ElseIf mainCount > 1540 And mainCount < 1550 Then
+        ElseIf mainCount > 1340 And mainCount < 1350 Then
             tempPowers.Add(outputP)
-        ElseIf mainCount = 1550 Then
+        ElseIf mainCount = 1350 Then
             getAveragePower()
             laser.RS232SendCommand = "LCT3300"
             writeToStatus("Setting current to 3.3 A")
             threshold = 2.7
-        ElseIf mainCount > 1840 And mainCount < 1850 Then
+        ElseIf mainCount > 1640 And mainCount < 1650 Then
             tempPowers.Add(outputP)
-        ElseIf mainCount = 1850 Then
+        ElseIf mainCount = 1650 Then
             getAveragePower()
             writeToStatus("Test finished. Shutting down pump laser...")
             threshold = -1
@@ -210,9 +212,9 @@ Public Class frmTCE
             laser.RS232SendCommand = "LCT0"
         End If
         '----------------------------- This is the alarm section, which is always looking for NaN or power < threshold
-        If mainCount > 60 And outputP < threshold Then ' I will start looking for an alarm 1 second after the first ramp
+        If mainCount > 70 And outputP < threshold Then ' I will start looking for an alarm 1 second after the first ramp
             laser.RS232SendCommand = "LCT0"
-            writeToStatus("Quick drop alarm (went below " & threshold & " W or returned NaN)")
+            writeToStatus("Quick drop alarm (went below " & threshold & " W)")
             laser.RS232SendCommand = "LCT0"
             tmrMain.Stop()
         End If
@@ -372,13 +374,14 @@ Public Class frmTCE
         'Dim pumpin() As Double = {8.32, 14.12, 19.8, 22.6, 25.4, 28.1} 'calibrated at 29/9/2017
         'Dim pumpin() As Double = {2.49, 8.32, 14.12, 19.8, 22.6, 25.4} 'calibrated at 29/9/2017
         'Dim pumpin() As Double = {2.43, 8.17, 13.9, 19.5, 22.3, 25.0} 'calibrated on 2/8/18 MBP
-        Dim pumpin() As Double = {2.23, 4.87, 7.54, 10.21, 12.8, 14.4} 'calibrated on 15/8/18 MBP following rework
+        'Dim pumpin() As Double = {2.23, 4.87, 7.54, 10.21, 12.8, 14.4} 'calibrated on 15/8/18 MBP following rework
+        Dim pumpin() As Double = {2.27, 5.04, 7.7, 10.38, 12.97, 14.57} 'calibrated on 21/8/18 MBP HIGH EFF
         Dim pts() As PointF
 
         For jjj = 1 To pumpin.Count
             pts =
        {
-            New PointF(pumpin(jjj - 1), outList(jjj - 1))
+            New PointF(pumpin(jjj - 1), 1.064 * outList(jjj - 1))
        }
             Points.Add(pts(0))
         Next
