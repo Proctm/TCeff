@@ -20,6 +20,7 @@ Public Class frmTCE
     Private AvgPower As Double()
     Dim tempPowers, outList As New List(Of Double)
     Private Points As New List(Of PointF)()
+    Dim engLasOff As Boolean = True
 
     Private Sub frmTCE_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Call Init_Form_PowerMeters()
@@ -118,6 +119,23 @@ Public Class frmTCE
         outList.Add(averagePower)
         tempPowers.Clear()
     End Sub
+    Private Sub btnEngPumpOn_Click(sender As Object, e As EventArgs) Handles btnEngPumpOn.Click
+        Dim currCommand As String
+        Dim inputI As String = txtEngPumpI.Text()
+        If engLasOff = True Then
+            laser.RS232SendCommand = "GS"
+            laser.RS232SendCommand = "LCT0"
+            laser.RS232SendCommand = "LR"
+            writeToStatus("Pump initialised via engineering controls")
+            engLasOff = False
+        End If
+        If engLasOff = False Then
+            currCommand = "LCT" + inputI
+            laser.RS232SendCommand = currCommand
+        End If
+    End Sub
+
+
 
     Private Sub tmrMain_Tick(sender As Object, e As EventArgs) Handles tmrMain.Tick
         If mainCount = 2 Then
@@ -209,7 +227,7 @@ Public Class frmTCE
             DataAnalysis()
         ElseIf mainCount = 1660 Then
             itc.switchLdOutput(False)
-            itc.switchTecOutput(False)
+            'itc.switchTecOutput(False)
             tmrMain.Stop()
         End If
         '----------------------------- This is the alarm section, which is always looking for NaN or power < threshold
@@ -271,6 +289,15 @@ Public Class frmTCE
         End If
     End Sub
 
+    Private Sub txtEngPumpI_TextChanged(sender As Object, e As EventArgs) Handles txtEngPumpI.TextChanged
+
+    End Sub
+
+    Private Sub BtnEngPumpOff_Click(sender As Object, e As EventArgs) Handles BtnEngPumpOff.Click
+        laser.RS232SendCommand = "LCT0"
+        writeToStatus("Engineer has turned the pump off")
+        engLasOff = True
+    End Sub
 
     Private Sub WritetoCSV(ByVal CSVString As String)
         Dim file As System.IO.StreamWriter
@@ -383,7 +410,10 @@ Public Class frmTCE
         'Dim pumpin() As Double = {2.49, 8.32, 14.12, 19.8, 22.6, 25.4} 'calibrated at 29/9/2017
         'Dim pumpin() As Double = {2.43, 8.17, 13.9, 19.5, 22.3, 25.0} 'calibrated on 2/8/18 MBP
         'Dim pumpin() As Double = {2.23, 4.87, 7.54, 10.21, 12.8, 14.4} 'calibrated on 15/8/18 MBP following rework
-        Dim pumpin() As Double = {2.27, 5.04, 7.7, 10.38, 12.97, 14.57} 'calibrated on 21/8/18 MBP HIGH EFF
+        'Dim pumpin() As Double = {2.27, 5.04, 7.7, 10.38, 12.97, 14.57} 'calibrated on 21/8/18 MBP HIGH EFF
+        'Dim pumpin() As Double = {2.21, 4.87, 7.53, 10.13, 12.7, 14.4} 'calibrated on 12/11/19 MBP Low eff
+        Dim pumpin() As Double = {2.07, 4.51, 6.98, 9.42, 11.8, 13.3} 'calibrated on 14/11/19 MBP SPLICED ON NEW LENGTH OF DC PASSIVE
+
         Dim pts() As PointF
 
         For jjj = 1 To pumpin.Count
@@ -405,7 +435,7 @@ Public Class frmTCE
 
 
         txtFinalPump.Text = Format(newpumpPower, "0.00") '0.86 : Pump wavelength comepensation due to new pump laser wavelength 
-        txtFinalEff.Text = Format((5 / newpumpPower) * 100, "0.00")
+        txtFinalEff.Text = Format((5 / newpumpPower) * 100, "0.00") '1.06 takes into account splice loss from the pump
 
 
         Dim filedb As System.IO.StreamWriter
