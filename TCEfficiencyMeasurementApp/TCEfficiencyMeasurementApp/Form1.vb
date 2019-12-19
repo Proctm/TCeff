@@ -400,7 +400,7 @@ Public Class frmTCE
             Next i
 
             Dim avgValue As Double = getAverage(sss)
-            AvgPower(kk) = (1 / 0.935) * avgValue 'Combiner loss considered.
+            AvgPower(kk) = avgValue 'Combiner loss considered.
 
         Next kk
 
@@ -431,7 +431,7 @@ Public Class frmTCE
 
         Dim pumpPower As Double
         pumpPower = (5 - intercept) / slope
-        Dim newpumpPower As Double = pumpPower * 1.0 '0.86 I don't think this is right.. MBP
+        Dim newpumpPower As Double = pumpPower * 0.86 '0.86 I don't think this is right.. MBP
 
 
         txtFinalPump.Text = Format(newpumpPower, "0.00") '0.86 : Pump wavelength comepensation due to new pump laser wavelength 
@@ -440,7 +440,7 @@ Public Class frmTCE
 
         Dim filedb As System.IO.StreamWriter
         Dim filedbname As String
-        filedbname = "\\FCHO-SBS-1\Public2\Eng\Data\Doped\TCtestDB\DoNOTdelete\filedB.csv"
+        filedbname = "G:\Eng\Data\Doped\TCtestDB\DoNOTdelete\filedB.csv"
         Dim Results As String = txtSpoolId.Text & "," & secondsElapsed & "," & txtFinalPump.Text & "," & txtFinalEff.Text
 
         If IO.File.Exists(filedbname) Then

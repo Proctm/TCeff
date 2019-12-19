@@ -61,6 +61,7 @@ Partial Class frmTCE
         Me.txtEngPumpI = New System.Windows.Forms.TextBox()
         Me.tmrUpdatePower = New System.Windows.Forms.Timer(Me.components)
         Me.tmrMain = New System.Windows.Forms.Timer(Me.components)
+        Me.Label8 = New System.Windows.Forms.Label()
         CType(Me.crtLiveResults, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.crtResults, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -290,6 +291,7 @@ Partial Class frmTCE
         '
         'GroupBox2
         '
+        Me.GroupBox2.Controls.Add(Me.Label8)
         Me.GroupBox2.Controls.Add(Me.Button1)
         Me.GroupBox2.Controls.Add(Me.Button2)
         Me.GroupBox2.Controls.Add(Me.BtnEngPumpOff)
@@ -371,6 +373,17 @@ Partial Class frmTCE
         'tmrMain
         '
         '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.ForeColor = System.Drawing.Color.Black
+        Me.Label8.Location = New System.Drawing.Point(719, 23)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(109, 13)
+        Me.Label8.TabIndex = 6
+        Me.Label8.Text = "Updated 19/12/2019"
+        '
         'frmTCE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -436,4 +449,5 @@ Partial Class frmTCE
     Friend WithEvents txtEngPumpI As TextBox
     Friend WithEvents tmrUpdatePower As Timer
     Friend WithEvents tmrMain As Timer
+    Friend WithEvents Label8 As Label
 End Class
