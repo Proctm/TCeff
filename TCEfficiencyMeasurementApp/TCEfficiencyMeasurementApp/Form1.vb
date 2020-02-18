@@ -264,7 +264,7 @@ Public Class frmTCE
         End If
         '-----------------opens up my raw data file (only once though)
         If mainCount = 0 Then
-            Dim path As String = "\\FCHO-SBS-1\Public2\Eng\Data\Doped\TCtestDB\"
+            Dim path As String = "G:\Eng\Data\Doped\TCtestDB\"
             Dim fileID As String = txtSpoolId.Text.Replace("/", "_").Replace("\", "_").Replace("-", "_").Replace(" ", "_")
             Dim testdate As DateTime = Now
             fullFileName = path & fileID & ".csv"
@@ -412,14 +412,15 @@ Public Class frmTCE
         'Dim pumpin() As Double = {2.23, 4.87, 7.54, 10.21, 12.8, 14.4} 'calibrated on 15/8/18 MBP following rework
         'Dim pumpin() As Double = {2.27, 5.04, 7.7, 10.38, 12.97, 14.57} 'calibrated on 21/8/18 MBP HIGH EFF
         'Dim pumpin() As Double = {2.21, 4.87, 7.53, 10.13, 12.7, 14.4} 'calibrated on 12/11/19 MBP Low eff
-        Dim pumpin() As Double = {2.07, 4.51, 6.98, 9.42, 11.8, 13.3} 'calibrated on 14/11/19 MBP SPLICED ON NEW LENGTH OF DC PASSIVE
+        'Dim pumpin() As Double = {2.07, 4.51, 6.98, 9.42, 11.8, 13.3} 'calibrated on 14/11/19 MBP SPLICED ON NEW LENGTH OF DC PASSIVE
+        Dim pumpin() As Double = {2.21, 4.87, 7.53, 10.13, 12.7, 14.4} 'REVERTED - LOST OLD CALLIBRATION BUT REMEMBER IT BEING SIMILAR TO PREVIOUS (CHANGE CAN ONLY REDUCE MEASURED EFFICIENCY)
 
         Dim pts() As PointF
 
         For jjj = 1 To pumpin.Count
             pts =
        {
-            New PointF(pumpin(jjj - 1), 1.064 * outList(jjj - 1))
+            New PointF(pumpin(jjj - 1), outList(jjj - 1))
        }
             Points.Add(pts(0))
         Next
